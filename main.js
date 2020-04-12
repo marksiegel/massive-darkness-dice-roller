@@ -73,6 +73,7 @@ function makeDie(dieColor) {
     li.dataset.side = `${index+1}`;
     li.onclick = function (e) { 
       die.classList.toggle("die-selected");
+      storeChanged();
       e.stopPropagation();
     };
 
@@ -175,7 +176,6 @@ function rollDice(onlySelected = false) {
   });
   setTimeout(function () {
     document.getElementById("roll-button").disabled = false;
-    document.getElementById("roll-selected-button").disabled = false;
     updateResult();
   }, 1500);
 }
@@ -203,4 +203,12 @@ controlArea.appendChild(makeDiceControl("yellow"));
 controlArea.appendChild(makeDiceControl("red"));
 controlArea.appendChild(makeDiceControl("blue"));
 controlArea.appendChild(makeDiceControl("green"));
+
+function updateRerollButton () {
+  const found = store.dice.filter(die => die.div.classList.contains("die-selected")).length;
+  document.getElementById("roll-selected-button").disabled = !found;
+}
+updateRerollButton();
+addStoreListener(updateRerollButton);
+
 })();
