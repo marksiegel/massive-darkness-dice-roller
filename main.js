@@ -71,6 +71,10 @@ function makeDie(dieColor) {
     const li = document.createElement('li');
     li.classList = 'die-item';
     li.dataset.side = `${index+1}`;
+    li.onclick = function (e) { 
+      die.classList.toggle("die-selected");
+      e.stopPropagation();
+    };
 
     for (const pip of face) {
       const span = document.createElement('span');
@@ -159,14 +163,25 @@ function updateResult() {
   document.getElementById("result-defense-diamond-label").innerText = defense.diamond;
 }
 
-function rollDice() {
+function rollDice(onlySelected = false) {
   document.getElementById("roll-button").disabled = true;
-  setTimeout(function () { document.getElementById("roll-button").disabled = false; }, 1500);
+  document.getElementById("roll-selected-button").disabled = true;
   store.dice.forEach(die => {
-    toggleClasses(die.div);
-    die.div.dataset.roll = getRandomNumber(1, 6);
+    if (!onlySelected || die.div.classList.contains("die-selected")) {
+      toggleClasses(die.div);
+      die.div.dataset.roll = getRandomNumber(1, 6);
+      die.div.classList.remove("die-selected");
+    }
   });
-  setTimeout(function () { updateResult(); }, 1500);
+  setTimeout(function () {
+    document.getElementById("roll-button").disabled = false;
+    document.getElementById("roll-selected-button").disabled = false;
+    updateResult();
+  }, 1500);
+}
+
+function rollSelectedDice() {
+  rollDice(true);
 }
 
 function toggleClasses(die) {
@@ -180,7 +195,8 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-document.getElementById("roll-button").addEventListener("click", rollDice);
+document.getElementById("roll-button").onclick = function () { rollDice(false); };
+document.getElementById("roll-selected-button").onclick = function () { rollDice(true); }
 
 const controlArea = document.getElementById("dice-control-area");
 controlArea.appendChild(makeDiceControl("yellow"));
