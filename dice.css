@@ -19,7 +19,8 @@ body {
   grid-template-columns: repeat(auto-fit, 128px);
   grid-template-rows: auto;
   justify-items: left;
-  padding: 32px;
+  padding: 16px;
+  margin-top: 32px;
   perspective: 600px;
 }
 .die-list {
@@ -205,7 +206,10 @@ button.dice-control-minus {
   font-size: 20px;
   vertical-align: center;
 }
-
+.result-caption {
+  display: inline-block;
+  width: 80px;
+}
 @media (min-width: 900px) {
   .dice {
     perspective: 1300px;
