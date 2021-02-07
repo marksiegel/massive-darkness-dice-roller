@@ -100,9 +100,18 @@ function addDie(dieColor) {
   });
   storeChanged();
 }
+  
+function findLastIndex(dice, dieColor) {
+  for(let i=dice.length-1; i>=0; i--) {
+    if (dice[i].color === dieColor) {
+      return i;
+    }
+  }
+  return -1;
+}
 
 function removeDie(dieColor) {
-  const index = store.dice.findIndex(die => die.color === dieColor);
+  const index = findLastIndex(store.dice, dieColor);
   if (index >= 0) {
     const removed = store.dice.splice(index, 1)[0];
     const diceDiv = document.getElementById("dice");
